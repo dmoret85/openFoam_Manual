@@ -31,6 +31,22 @@ Assumptions and limitations are stated explicitly, with decisions justified usin
 
 🚧 Work in progress — structure and content will evolve.
 
+## Content
+
+1. Introduction and Philosophy
+2.CFD Physics and Assumptions
+3.OpenFOAM Fundamentals
+4.Mesh Strategy and Quality
+5.Solver Selection and Usage
+6.Turbulence Modeling
+7.Boundary Conditions
+8.Numerics and Stability
+9.Free-Surface and Multiphase Flows
+10.Verification and Validation
+11.Post-Processing and Interpretation
+12.Debugging and Troubleshooting
+13.Example Engineering Cases
+   
 ## License
 
 To be defined.
