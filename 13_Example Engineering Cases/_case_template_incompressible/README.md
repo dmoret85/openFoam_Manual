@@ -56,3 +56,5 @@ Summarize boundary conditions in physical terms.
 - Inlet: velocity / mass flow / profile
 - Outlet: pressure reference
 - Walls: no-slip
+
+Boundary condition selection follows **Chapter 7 — Boundary Conditions** (see `07_boundary_conditions/`), especially `outlets.md` for backflow-safe outlet handling.
