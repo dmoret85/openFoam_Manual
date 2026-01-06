@@ -1,0 +1,84 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Incompressible Case Template                                                |
+| fvSolution                                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+
+// Linear solvers
+solvers
+{
+    // Pressure solver
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-7;
+        relTol          0.1;                      //avoids over-solving early iterations
+
+        smoother        GaussSeidel;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        cacheAgglomeration true;
+        nCellsInCoarsestLevel 20;
+        agglomerator    faceAreaPair;
+        mergeLevels     1;
+    }
+
+    // Velocity solver
+    U
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-8;
+        relTol          0.1;
+    }
+
+    // Turbulence quantities (used if present)
+    "(k|omega|nuTilda)"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-8;
+        relTol          0.1;
+    }
+}
+
+// Pressure–velocity coupling
+PIMPLE
+{
+    // Outer correctors = SIMPLE-like loops
+    nOuterCorrectors          2;
+
+    // Pressure–velocity corrections per outer loop
+    nCorrectors               2;
+
+    // Important for non-orthogonal meshes
+    nNonOrthogonalCorrectors  1;
+
+    // Optional but useful for stability
+    momentumPredictor        yes;
+}
+
+// Under-relaxation (still relevant in PIMPLE)
+relaxationFactors
+{
+    fields
+    {
+        // Conservative pressure relaxation
+        p               0.3;
+    }
+
+    equations
+    {
+        // Velocity relaxation
+        U               0.7;
+    }
+}
