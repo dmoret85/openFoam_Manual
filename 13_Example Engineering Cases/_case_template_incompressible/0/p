@@ -1,0 +1,54 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Incompressible Case Template                                                |
+| Pressure field                                                              |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      p;
+}
+
+// Dimensional units: [m^2 s^-2] for kinematic pressure (p/rho)
+dimensions      [0 2 -2 0 0 0 0];
+
+// Initial condition
+// Zero gauge pressure is a safe default
+internalField   uniform 0;
+
+// Boundary conditions
+boundaryField
+{
+    inlet
+    {
+        // Allow pressure to adjust to imposed velocity
+        type            zeroGradient;
+    }
+
+    outlet
+    {
+        // Reference pressure to close the incompressible system                //Pressure is defined up to a constant, one boundary (or cell) must provide a reference
+        type            fixedValue;
+        value           uniform 0;
+    }
+
+    walls
+    {
+        // No normal pressure gradient at solid walls
+        type            zeroGradient;
+    }
+
+    symmetry
+    {
+        type            symmetryPlane;
+    }
+
+    frontAndBack
+    {
+        type            empty;
+    }
+}
