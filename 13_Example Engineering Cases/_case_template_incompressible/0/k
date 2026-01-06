@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Turbulent kinetic energy                                                    |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      k;
+}
+
+dimensions      [0 2 -2 0 0 0 0];
+
+// Conservative initial turbulence level
+internalField   uniform 0.01;
+
+boundaryField
+{
+    inlet
+    {
+        // Placeholder: refine based on turbulence intensity if known
+        type            fixedValue;
+        value           uniform 0.01;
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    walls
+    {
+        // Wall-function treatment
+        type            kqRWallFunction;
+        value           uniform 0;
+    }
+
+    symmetry
+    {
+        type            symmetryPlane;
+    }
+
+    frontAndBack
+    {
+        type            empty;
+    }
+}
