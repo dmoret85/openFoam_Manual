@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Incompressible Case Template                                                |
+| Velocity field                                                              |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+
+// Dimensional units: [m s^-1]
+dimensions      [0 1 -1 0 0 0 0];
+
+// Initial condition
+// Set to zero unless a better physically justified guess exists
+internalField   uniform (0 0 0);
+
+// Boundary conditions
+boundaryField
+{
+    inlet
+    {
+        // Prescribed inflow velocity (example placeholder)
+        type            fixedValue;
+        value           uniform (1 0 0);
+    }
+
+    outlet
+    {
+        // Allow velocity to adjust based on pressure                    //avoids over-constraining the flow, pressure will set the mass balance
+        type            zeroGradient;
+    }
+
+    walls
+    {
+        // No-slip condition for solid walls
+        type            noSlip;
+    }
+
+    symmetry
+    {
+        // Only use if geometry and physics justify it                  //Roughness is handled via turbulence models, not here
+        type            symmetryPlane;
+    }
+
+    frontAndBack
+    {
+        // Use for 2D cases with empty direction
+        type            empty;
+    }
+}
