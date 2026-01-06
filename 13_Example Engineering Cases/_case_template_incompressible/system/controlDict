@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Incompressible Case Template                                                |
+| controlDict                                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+
+// Solver selection - pimpleFoam --> Robust for transient incompressible flows; works for steady problems via time-averaging.
+application     pimpleFoam;
+
+// Time control
+startFrom       startTime;
+startTime       0;
+
+stopAt          endTime;
+endTime         10;
+
+// Time-step control
+deltaT          1e-3;
+
+adjustTimeStep  yes;
+maxCo           0.5;
+maxDeltaT       1;
+
+// Output control
+writeControl    timeStep;
+writeInterval   100;
+
+purgeWrite      0;
+writeFormat     ascii;
+writePrecision  6;
+writeCompression off;
+
+timeFormat      general;
+timePrecision   6;
+
+// Runtime control
+runTimeModifiable yes;
