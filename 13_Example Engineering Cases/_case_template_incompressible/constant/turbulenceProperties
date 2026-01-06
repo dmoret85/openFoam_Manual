@@ -1,0 +1,25 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Turbulence control                                                         |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      turbulenceProperties;
+}
+
+// Reynolds-Averaged Navier–Stokes
+simulationType  RAS;
+
+RAS
+{
+    // k-omega SST: robust for adverse pressure gradients and separation
+    RASModel        kOmegaSST;
+
+    turbulence      on;
+    printCoeffs     on;
+}
