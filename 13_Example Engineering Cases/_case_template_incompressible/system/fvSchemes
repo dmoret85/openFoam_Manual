@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Incompressible Case Template                                                |
+| fvSchemes                                                                   |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+
+// Time discretization
+ddtSchemes
+{
+    // Robust 2nd-order implicit time integration for transient engineering cases
+    default         backward;
+}
+
+// Spatial gradients
+gradSchemes
+{
+    // Linear gradients are a solid default; stability depends more on div schemes
+    default         Gauss linear;
+}
+
+// Divergence schemes (convection) — stability lives here
+divSchemes
+{
+    // Conservative and stable starter for momentum
+    div(phi,U)                  Gauss upwind;
+
+    // If using RANS k-omega:
+    div(phi,k)                  Gauss upwind;
+    div(phi,omega)              Gauss upwind;
+
+    // If using Spalart–Allmaras:
+    div(phi,nuTilda)            Gauss upwind;
+
+    // Viscous stress term for incompressible solvers (kept explicit here)
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+}
+
+// Diffusion (Laplacian) terms
+laplacianSchemes
+{
+    // Corrected handles non-orth meshes; if highly non-orth, consider limited schemes later
+    default         Gauss linear corrected;
+}
+
+// Interpolation of cell values to faces
+interpolationSchemes
+{
+    default         linear;
+}
+
+// Surface-normal gradient on faces
+snGradSchemes
+{
+    default         corrected;
+}
+
+// Optional: flux requirements (keep empty unless a solver/utility complains)
+fluxRequired
+{
+    default         no;
+    p;
+}
