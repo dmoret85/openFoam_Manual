@@ -1,6 +1,6 @@
 # OpenFOAM Engineering Manual
 
-OpenFOAM Engineering Manual is an engineering-focused guide that bridges the gap between official OpenFOAM documentation and real-world CFD practice. It explains why modeling and numerical choices are made, how to detect failure modes, and how to build stable, physically consistent simulations.
+OpenFOAM Engineering Manual is an engineering-focused guide that bridges the gap between official OpenFOAM documentation and real-world CFD practice. It explains why modelling and numerical choices are made, how to detect failure modes, and how to build stable, physically consistent simulations.
 
 ## Purpose
 
