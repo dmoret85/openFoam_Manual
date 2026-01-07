@@ -78,6 +78,9 @@ Key considerations:
 
 Excessive growth rates or insufficient wall-normal resolution often lead to unphysical wall shear stress and pressure loss predictions.
 
+Near-wall mesh resolution must be consistent with the turbulence model; see
+Chapter 6 — Near-Wall Treatment and y⁺.
+
 ---
 
 ## 4.7 Mesh-Induced Failure Modes
