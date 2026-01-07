@@ -35,6 +35,10 @@ Document all major assumptions explicitly.
 - Gravity: on / off
 - Steady or transient: (state clearly)
 
+This case uses wall-function RANS.
+Target near-wall resolution: 30 < y⁺ < 300
+(see Chapter 6 — Near-Wall Treatment and y⁺).
+
 If an assumption is questionable, document why it is still acceptable.
 
 ---
