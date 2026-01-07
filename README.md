@@ -38,7 +38,7 @@ Assumptions and limitations are stated explicitly, with decisions justified usin
 3.OpenFOAM Fundamentals
 4.Mesh Strategy and Quality
 5.Solver Selection and Usage
-6.Turbulence Modeling
+6.Turbulence Modelling
 7.Boundary Conditions
 8.Numerics and Stability
 9.Free-Surface and Multiphase Flows
