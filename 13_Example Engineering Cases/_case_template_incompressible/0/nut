@@ -1,0 +1,53 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM Engineering Manual                                                 |
+| Incompressible Case Template                                                |
+| Turbulent viscosity (nut)                                                   |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      nut;
+}
+
+// Units: [m2/s]
+dimensions      [0 2 -1 0 0 0 0];
+
+// Initial condition (turbulent viscosity). Start from zero; model will build it.
+internalField   uniform 0;
+
+boundaryField
+{
+    inlet
+    {
+        // nut is computed from k and omega in k-omega SST
+        type            calculated;
+        value           uniform 0;
+    }
+
+    outlet
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+
+    walls
+    {
+        // Wall-function turbulent viscosity for k-omega SST (wall-function approach)
+        type            nutkWallFunction;
+        value           uniform 0;
+    }
+
+    symmetry
+    {
+        type            symmetryPlane;
+    }
+
+    frontAndBack
+    {
+        type            empty;
+    }
+}
