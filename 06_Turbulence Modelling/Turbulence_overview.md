@@ -43,8 +43,8 @@ Two common approaches:
 
 Using a turbulence model outside its intended near-wall resolution range produces physically inconsistent results, even if the solver converges.
 
-Near-wall mesh resolution must be consistent with the turbulence model; see
-Chapter 6 — Near-Wall Treatment and y⁺.
+Near-wall assumptions are discussed separately in
+Near-Wall Treatment.
 
 ---
 
