@@ -1,112 +1,74 @@
-# Chapter 6 — Turbulence Modeling
+# Chapter 6 — Turbulence modelling
 
-## 6.1 Role of Turbulence Modeling in Engineering CFD
+# Turbulence Modelling — Engineering Perspective
 
-Most engineering flows are turbulent, yet resolving all turbulent scales directly is computationally infeasible for practical problems. Turbulence models are therefore not optional approximations, but core components of the mathematical model.
+Turbulence modelling is a core part of the mathematical model in CFD, not a numerical option. In most engineering flows, the governing equations are solved in an averaged or filtered form, and turbulence models are required to close the system.
 
-A turbulence model does not “add turbulence” to the flow; it closes the governing equations by modeling the effect of unresolved scales. The quality of a CFD prediction depends on how well this closure aligns with the flow physics, mesh resolution, and numerical approach.
-
----
-
-## 6.2 Averaged and Filtered Governing Equations
-
-Turbulence modeling begins with a modification of the Navier–Stokes equations:
-
-- **RANS** models operate on time-averaged equations  
-- **LES** models operate on spatially filtered equations  
-- **Hybrid models** blend both approaches  
-
-Each framework introduces additional unknown terms that must be modeled. These modeled terms represent physical assumptions that cannot be removed by numerical refinement alone.
+A turbulence model does not introduce turbulence into the flow. It represents the effect of unresolved turbulent motion on the resolved scales. As such, turbulence modelling introduces **physical assumptions** that cannot be eliminated by numerical refinement alone.
 
 ---
 
-## 6.3 RANS Modeling: When and Why
+## 1. Averaged and Filtered Flow Descriptions
 
-Reynolds-Averaged Navier–Stokes (RANS) models are the most commonly used in engineering due to their robustness and low computational cost.
+Turbulence models arise from modifying the Navier–Stokes equations:
 
-Typical use cases:
-- Steady or statistically steady flows  
-- Design studies requiring many simulations  
-- Flows dominated by attached boundary layers  
+- **RANS (Reynolds-Averaged Navier–Stokes)**  
+  Governing equations are time-averaged. All turbulent scales are modelled.
 
-RANS models assume a clear separation between mean flow and turbulent fluctuations. They are less reliable for strongly unsteady, separated, or transitional flows.
+- **LES (Large Eddy Simulation)**  
+  Governing equations are spatially filtered. Large scales are resolved; small scales are modelled.
 
----
+- **Hybrid RANS–LES**  
+  Combine RANS behavior near walls with LES-like behavior in separated regions.
 
-## 6.4 Near-Wall Treatment and Mesh Consistency
-
-Near-wall treatment is inseparable from turbulence modeling.
-
-Two common approaches:
-- **Wall-resolved models**: require \(y^+ \approx 1\)  
-- **Wall-function approaches**: valid for \(30 < y^+ < 300\)  
-
-Using a turbulence model outside its intended near-wall resolution range produces physically inconsistent results, even if the solver converges.
-
-Near-wall assumptions are discussed separately in
-Near-Wall Treatment.
+Each approach implies different resolution requirements, computational cost, and predictive capability.
 
 ---
 
-## 6.5 LES Modeling: Capabilities and Requirements
+## 2. RANS modelling in Engineering Practice
 
-Large Eddy Simulation (LES) resolves large turbulent structures while modeling subgrid-scale effects.
+RANS models are the most widely used approach in engineering CFD due to their robustness and efficiency.
+
+They are well suited for:
+- Steady or statistically steady flows
+- Design-oriented simulations
+- Flows dominated by attached boundary layers
+
+RANS models assume a clear separation between mean flow and turbulent fluctuations. They may struggle in flows with strong unsteadiness, separation, or transition.
+
+---
+
+## 3. LES and Resolution Dependence
+
+LES resolves a portion of the turbulence spectrum and therefore places strict demands on mesh resolution and time stepping.
 
 LES is appropriate when:
-- Large-scale unsteadiness is important  
-- Transient flow features dominate  
-- Sufficient computational resources are available  
+- Large-scale unsteadiness is essential to the problem
+- Transient flow structures are of interest
+- Computational resources are sufficient
 
-LES requires:
-- Fine mesh resolution in all directions  
-- Time steps small enough to resolve turbulence dynamics  
-- Low numerical dissipation  
-
-LES performed on an under-resolved mesh degenerates into an expensive RANS simulation with unpredictable behavior.
+LES performed on an under-resolved mesh degenerates into an expensive and poorly controlled model and should be avoided.
 
 ---
 
-## 6.6 Hybrid RANS–LES Approaches
+## 4. Hybrid Approaches
 
-Hybrid models (e.g. DES, DDES) aim to combine RANS near walls with LES in separated regions.
+Hybrid RANS–LES models aim to balance cost and fidelity but are sensitive to:
+- Mesh density and anisotropy
+- Transition regions between RANS and LES behavior
+- Flow separation location
 
-These models are sensitive to:
-- Grid spacing transitions  
-- Mesh anisotropy  
-- Flow separation location  
-
-Hybrid approaches should be used with caution and only when their assumptions are well understood.
+These models require careful validation and should not be treated as general-purpose solutions.
 
 ---
 
-## 6.7 Turbulence Model Selection Strategy
+## 5. Turbulence modelling as an Assumption
 
-Model selection should be driven by:
-- Flow physics and dominant phenomena  
-- Required accuracy and output quantities  
-- Available mesh resolution and computational budget  
+Turbulence modelling choices define what physics the simulation can and cannot represent.
 
-A more complex turbulence model does not guarantee better results. In many cases, a well-resolved RANS simulation is more reliable than a poorly resolved LES.
+Key points:
+- A more complex model does not guarantee better results
+- Model choice must be consistent with mesh resolution
+- Turbulence models must be selected **before** meshing
 
----
-
-## 6.8 Common Turbulence-Related Failure Modes
-
-Typical issues include:
-- Using wall functions with \(y^+ \approx 1\)  
-- Claiming LES with insufficient resolution  
-- Interpreting RANS results as instantaneous flow  
-- Ignoring turbulence model sensitivity  
-
-These errors often produce smooth, apparently reasonable results that are physically misleading.
-
----
-
-## 6.9 Engineering Guidance
-
-- Choose turbulence models early, before meshing  
-- Design the mesh to support the chosen model  
-- Treat turbulence modeling as a modeling assumption, not a numerical setting  
-- Validate turbulence predictions against physical expectations  
-
-Turbulence modeling is a compromise between physics, numerics, and resources. Understanding that compromise is essential for trustworthy CFD.
+Turbulence modelling should be treated as an explicit modelling assumption and documented accordingly.
