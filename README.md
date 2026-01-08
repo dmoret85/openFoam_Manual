@@ -101,3 +101,7 @@ This manual prioritizes **robustness and credibility** over minimal runtime or a
 ### Chapter 10 — Verification and Validation
 - [10.1 Verification](10_Verification%20and%20Validation/10.1_Verification.md)
 - [10.2 Validation](10_Verification%20and%2_)
+
+## Chapter 12 - Debugging and Troubleshooting
+
+## Chapter 13 - Case Library
