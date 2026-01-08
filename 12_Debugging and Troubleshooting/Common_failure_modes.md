@@ -4,7 +4,7 @@
 
 Most OpenFOAM simulations that fail do not fail catastrophically. They often run, converge numerically, and produce smooth fields that are nevertheless physically wrong. Debugging CFD therefore requires a different mindset than debugging software.
 
-The goal of debugging is not to eliminate solver errors, but to identify **violations of physical, modeling, or numerical assumptions**. OpenFOAM is generally explicit when numerical limits are exceeded; more subtle errors must be detected by the user.
+The goal of debugging is not to eliminate solver errors, but to identify **violations of physical, modeling, or numerical assumptions**. OpenFOAM is generally explicit when numerical limits are exceeded; more subtle errors must be detected by the user. Debugging CFD is therefore an exercise in validating assumptions, not tuning parameters until the solver stops complaining.
 
 ---
 
@@ -17,6 +17,8 @@ CFD failures typically fall into three overlapping categories:
 - **Numerical stability failures**
 
 Correct diagnosis requires isolating which category dominates before attempting corrective action.
+
+These categories are not mutually exclusive. A numerical failure is often triggered by a mesh or modeling issue, even if it manifests as solver divergence.
 
 ---
 
@@ -53,6 +55,8 @@ Common causes:
 - Abrupt refinement transitions
 
 Mesh problems often manifest as numerical instability but cannot be fixed through solver settings alone.
+
+Mesh-related failures often appear only after numerics are made more accurate, as excessive numerical diffusion can initially mask mesh deficiencies.
 
 ---
 
@@ -97,6 +101,7 @@ A systematic debugging approach includes:
 4. Start with conservative turbulence and discretization models  
 5. Monitor physically meaningful quantities  
 
+These steps should be followed in order. Skipping directly to numerical tuning often obscures the true source of failure.
 Changes should be applied incrementally and evaluated independently.
 
 ---
@@ -129,3 +134,16 @@ Further refinement beyond this point may increase cost without improving enginee
 CFD debugging is not about achieving perfect convergence or eliminating all numerical artifacts. It is about establishing **confidence in the model within known limits**.
 
 A simulation that is understood and bounded is more valuable than one that appears perfect but is poorly diagnosed.
+
+## 12.11 Symptom-to-Cause Mapping
+
+| Symptom | Likely dominant cause |
+|------|----------------------|
+| Immediate divergence | Time step too large, severe mesh defects |
+| Oscillating residuals | Poor pressure–velocity coupling, outlet issues |
+| Smooth but wrong solution | Physical modeling failure, false convergence |
+| Unbounded turbulence variables | Skewness, aggressive schemes |
+| Sensitivity to relaxation factors | Mesh or BC inconsistency |
+
+This table should be used as a starting point for diagnosis, not as a substitute for systematic analysis.
+
