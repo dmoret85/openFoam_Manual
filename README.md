@@ -105,3 +105,16 @@ This manual prioritizes **robustness and credibility** over minimal runtime or a
 ## Chapter 12 - Debugging and Troubleshooting
 
 ## Chapter 13 - Case Library
+
+---
+
+## Attribution & Intellectual Property
+
+© 2026 David Moret.
+
+This repository and its contents were developed independently by David Moret.
+
+If you use, adapt, or reference this work in software, engineering tools,
+research, or publications, please acknowledge the original author:
+
+> David Moret (2026)
