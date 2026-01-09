@@ -112,9 +112,12 @@ This manual prioritizes **robustness and credibility** over minimal runtime or a
 
 © 2026 David Moret.
 
-This repository and its contents were developed independently by David Moret.
+This repository and its contents were developed independently by David Moret
+and are not affiliated with, endorsed by, or produced for DPM Civil Engineering.
 
 If you use, adapt, or reference this work in software, engineering tools,
 research, or publications, please acknowledge the original author:
 
 > David Moret (2026)
+> 
+> See the LICENSE file for applicable terms.
