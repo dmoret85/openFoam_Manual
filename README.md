@@ -119,5 +119,5 @@ If you use, adapt, or reference this work in software, engineering tools,
 research, or publications, please acknowledge the original author:
 
 > David Moret (2026)
-> 
-> See the LICENSE file for applicable terms.
+
+See the LICENSE file for applicable terms.
