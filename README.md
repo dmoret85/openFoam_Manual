@@ -55,6 +55,20 @@ This manual prioritizes **robustness and credibility** over minimal runtime or a
 
 ---
 
+**Relationship to Official OpenFOAM Documentation**
+
+The official OpenFOAM User Guide documents what the software can do.
+
+This manual focuses on:
+  - Why specific modelling and numerical choices are made
+  - When common defaults fail silently
+  - How to diagnose stable but incorrect solutions
+  - How to establish confidence through verification and validation
+
+In practice, this manual is intended to be used alongside the official documentation:
+  - this manual for engineering judgment
+  - official documentation for syntax and implementation
+
 ## Status
 
 🚧 **Work in progress** — structure is stabilizing, content will continue to evolve.
