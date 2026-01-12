@@ -1,0 +1,75 @@
+## 5.3 SIMPLE, PISO, and PIMPLE: Conceptual Differences for Engineers
+
+OpenFOAM solvers are built around three primary pressure–velocity coupling algorithms: SIMPLE, PISO, and PIMPLE. While these algorithms are well-documented mathematically elsewhere, engineers primarily need to understand *what problem each algorithm is designed to solve* and *how misuse affects results*.
+
+This section explains the intent and practical implications of each algorithm from an engineering perspective.
+
+---
+
+### 5.3.1 SIMPLE Algorithm
+
+The SIMPLE (Semi-Implicit Method for Pressure-Linked Equations) algorithm is designed for **steady-state** problems.
+
+Key characteristics:
+
+* Iterative solution towards a fixed point
+* Use of under-relaxation to maintain stability
+* No physical time advancement
+
+Engineering interpretation:
+
+> SIMPLE stabilises the solution by slowing convergence, not by resolving transient physics.
+
+Typical use cases:
+
+* Fully developed internal flows
+* Long-term mean flow fields
+* Problems where transient behaviour is irrelevant to design outcomes
+
+Common misuse:
+
+* Applying SIMPLE to flows with inherent unsteadiness
+* Interpreting iteration count as physical time
+* Excessive relaxation masking poor mesh or physics choices
+
+If heavy under-relaxation is required for convergence, this often indicates a deeper modelling issue rather than a need for further numerical tuning.
+
+---
+
+### 5.3.2 PISO Algorithm
+
+The PISO (Pressure-Implicit with Splitting of Operators) algorithm is designed for **transient** simulations.
+
+Key characteristics:
+
+* Multiple pressure corrections per time step
+* No reliance on under-relaxation
+* Stability governed primarily by time-step size
+
+Engineering interpretation:
+
+> PISO assumes that the time step is small enough to accurately resolve the physics.
+
+Typical use cases:
+
+* Rapid transient events
+* Strongly time-dependent flows
+* Free-surface or multiphase simulations with strict Courant limits
+
+Common misuse:
+
+* Using overly large time steps to reduce runtime
+* Treating PISO as a “more stable” version of SIMPLE
+* Ignoring Courant number constraints
+
+When PISO becomes unstable, the cause is almost always excessive time stepping rather than insufficient solver tuning.
+
+---
+
+### 5.3.3 PIMPLE Algorithm
+
+PIMPLE is a hybrid algorithm combining elements of SIMPLE and PISO. It introduces outer correction loops that allow greater flexibility in time-step size.
+
+Key characteristics:
+
+* Supports transient and pseudo-steady s
