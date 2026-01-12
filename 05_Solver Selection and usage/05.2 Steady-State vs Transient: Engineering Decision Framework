@@ -1,0 +1,92 @@
+## 5.2 Steady-State vs Transient: Engineering Decision Framework
+
+One of the most common modelling errors in CFD is selecting a steady-state solver for a problem that is fundamentally transient. This choice is often driven by convenience or runtime considerations rather than physics. While OpenFOAM allows many transient problems to be forced into a steady-state formulation, doing so can invalidate the results even if numerical convergence is achieved.
+
+From an engineering perspective, the decision between steady-state and transient simulation must be based on whether *time-dependent behaviour is essential to the design question*.
+
+---
+
+### 5.2.1 When Steady-State Modelling Is Appropriate
+
+Steady-state solvers are appropriate when:
+
+* The flow is statistically steady over the time scales of interest.
+* The engineering objective concerns long-term average behaviour.
+* Transient fluctuations do not materially affect design outcomes.
+
+Typical examples include:
+
+* Fully developed internal pipe flow
+* Long-term average velocities or head losses
+* External flows where only mean forces are required
+
+In these cases, steady-state solvers (e.g. `simpleFoam`) provide:
+
+* Reduced computational cost
+* Simpler convergence assessment
+* Efficient parametric testing
+
+It is important to recognise that steady-state solvers do **not** represent physical time. Instead, they iteratively converge towards a fixed solution that satisfies the governing equations under the assumed conditions.
+
+---
+
+### 5.2.2 When Transient Modelling Is Required
+
+Transient modelling is mandatory when:
+
+* Flow features evolve in time and influence design decisions
+* Free surfaces move or deform
+* Flow separation, reattachment, or vortex shedding is significant
+* Loads, forces, or discharges vary meaningfully with time
+
+Examples include:
+
+* Dam breach and overtopping scenarios
+* Rapid filling or emptying of basins
+* Free-surface flow with wave action
+* Highly separated or unsteady external flows
+
+In these cases, using a steady-state solver constitutes a *physical modelling error*, regardless of numerical convergence quality.
+
+---
+
+### 5.2.3 Pseudo-Steady and Averaged Transient Solutions
+
+In practice, some problems sit between purely steady and fully transient regimes. A common and defensible approach is to:
+
+1. Run a transient simulation using an appropriate solver.
+2. Allow initial transients to decay.
+3. Extract time-averaged quantities over a representative window.
+
+This approach captures unsteady physics while still producing steady engineering metrics such as:
+
+* Mean discharge
+* Average forces
+* Long-term head losses
+
+This strategy must be clearly documented and justified, particularly where results are used for design or regulatory submission.
+
+---
+
+### 5.2.4 Common Misapplications
+
+The following practices frequently lead to misleading results:
+
+* Forcing inherently transient flows into steady-state solvers
+* Using large time steps to suppress unsteadiness
+* Interpreting numerical stability as physical realism
+
+A solution that is stable, smooth, and converged is not necessarily *physically correct*. Time dependence must be retained whenever it materially affects the outcome of interest.
+
+---
+
+### 5.2.5 Engineering Documentation Expectations
+
+For each CFD model, the following should be explicitly stated:
+
+* Whether the simulation is steady-state or transient
+* Why this choice is appropriate for the problem
+* What physical time scales are relevant
+* How transient results are interpreted (instantaneous vs averaged)
+
+This justification forms a critical link between solver selection and the verification and validation practices described in Chapter 10.
