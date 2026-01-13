@@ -1,0 +1,145 @@
+# Appendix A — AI-Assisted Geometry and CFD Workflows
+
+This appendix documents **non-traditional, AI-assisted tools** that may be used to accelerate early-stage CFD workflows. These tools are *explicitly not required* for standard OpenFOAM practice and should never replace validated CAD pipelines in design-critical or regulatory contexts.
+
+The purpose of this appendix is to:
+
+* Clarify *where* AI-generated geometry can be useful
+* Define *strict limits* on its engineering validity
+* Provide a defensible workflow for concept-level CFD only
+
+---
+
+## A.1 Scope and Intended Use
+
+AI-assisted geometry tools (e.g. image-to-3D systems such as Microsoft Copilot 3D) are suitable only for:
+
+* Conceptual studies
+* Educational demonstrations
+* Sensitivity analyses where *relative* trends matter more than absolute values
+
+They are **not suitable** for:
+
+* Final design verification
+* Regulatory submissions
+* Safety-critical assessments
+* Any case where dimensional accuracy is required
+
+The reader is expected to understand basic CAD–mesh–solver workflows prior to using this appendix.
+
+---
+
+## A.2 Copilot 3D: Role in the CFD Workflow
+
+Copilot 3D converts a single image into a triangulated surface model (typically GLB format). From a CFD perspective, this process introduces several implicit assumptions:
+
+* Geometry scale is inferred, not defined
+* Small features are hallucinated or smoothed
+* Sharp edges and corners are rarely preserved
+
+As a result, Copilot 3D outputs should be treated as **visual proxies**, not engineering geometry.
+
+Acceptable CFD uses include:
+
+* Blockage-ratio studies
+* Wake interaction demonstrations
+* Mesh and solver training cases
+
+Unacceptable uses include:
+
+* Pressure loss prediction
+* Structural load estimation
+* Validation against experimental data
+
+---
+
+## A.3 Geometry Conditioning Pipeline (Mandatory)
+
+All AI-generated geometry must pass through a conditioning stage before meshing. A typical pipeline is:
+
+1. **Copilot 3D**
+
+   * Image → GLB
+   * Treat output as unscaled and unverified
+
+2. **Blender (or equivalent)**
+
+   * Apply explicit scaling
+   * Remove internal faces
+   * Ensure watertight (manifold) surfaces
+   * Recalculate normals consistently
+   * Simplify topology where necessary
+
+3. **Export**
+
+   * STL or OBJ
+   * Units explicitly documented
+
+Skipping this conditioning step almost guarantees meshing failure or unphysical results.
+
+---
+
+## A.4 OpenFOAM Pre-Mesh Quality Gates
+
+Before invoking `snappyHexMesh`, the following checks should be performed:
+
+* Surface is watertight (no holes)
+* No self-intersections
+* Feature edges resolvable by target cell size
+* Minimum radius of curvature ≥ 2–3× local cell size
+
+Recommended utilities and practices:
+
+* `surfaceCheck`
+* `surfaceFeatureExtract`
+* Visual inspection in ParaView or Blender
+
+Any failure at this stage invalidates downstream results, regardless of solver convergence.
+
+---
+
+## A.5 Meshing and Solver Considerations
+
+AI-generated geometry typically lacks sharp, well-defined features. As a result:
+
+* Boundary layers may be poorly defined
+* Separation points may be displaced
+* Turbulence results should be interpreted qualitatively
+
+Recommended practices:
+
+* Prefer **robust solvers** (e.g. `pimpleFoam`)
+* Use conservative Courant limits
+* Avoid over-interpretation of absolute values
+
+---
+
+## A.6 Validation and Documentation Requirements
+
+Any CFD case using AI-generated geometry must explicitly document:
+
+* Geometry source (AI-generated)
+* Conditioning steps performed
+* Known limitations and excluded physics
+
+This disclosure is essential to avoid false confidence and misuse of results.
+
+---
+
+## A.7 Legal, IP, and Confidentiality Considerations
+
+Users must ensure that:
+
+* Uploaded images do not violate confidentiality agreements
+* Generated geometry complies with licensing terms
+* AI tools are not used with proprietary or sensitive data
+
+Failure to address these issues can have legal consequences independent of CFD accuracy.
+
+---
+
+## A.8 Summary
+
+AI-assisted geometry tools can accelerate *concept-level* CFD workflows when used with discipline and transparency. They do not reduce the need for engineering judgement; they increase it.
+
+When in doubt, default to conventional CAD and validated workflows.
