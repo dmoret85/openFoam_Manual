@@ -1,0 +1,89 @@
+# 05.4 Engineering Solver Selection in Practice
+
+While Section 5.1 classified solvers by physics and Sections 5.2–5.3 discussed steady–transient decision-making and algorithmic structure, this section focuses on **how those concepts are applied in real engineering workflows**. The emphasis here is not on solver syntax, but on *matching solver assumptions to the dominant physical mechanisms* and avoiding common but subtle misuse.
+
+In practice, solver selection is rarely binary. Engineers often work within constraints of computational cost, project timelines, and data availability. The purpose of this section is therefore to provide a **reasoned, defensible framework** for solver choice rather than prescriptive rules.
+
+---
+
+## 5.4.1 Solver Choice as a Physical Modelling Decision
+
+A CFD solver encodes assumptions about:
+
+* Temporal behaviour (steady vs transient)
+* Coupling between pressure and velocity
+* Treatment of density and phase interfaces
+* Numerical stability versus temporal accuracy
+
+From an engineering standpoint, the solver must resolve the **slowest and most energetic physical processes** that influence the quantity of interest. Any solver that suppresses or averages these processes—regardless of residual convergence—produces results of limited physical meaning.
+
+This is why solver selection must precede detailed meshing or turbulence-model tuning. If the solver cannot represent the governing physics, no amount of numerical refinement will recover validity.
+
+---
+
+## 5.4.2 Incompressible Single-Phase Flows
+
+For constant-density, single-phase flows, solver choice is governed primarily by the *temporal character of the flow*.
+
+* **Steady solvers (`simpleFoam`)** are appropriate only when the flow reaches a statistically stationary state with no dominant unsteadiness (e.g., fully developed pipe flow).
+* **Transient solvers (`pisoFoam`)** are required when the instantaneous evolution of the flow field affects the engineering outcome (e.g., pressure surges, vortex shedding).
+* **Hybrid solvers (`pimpleFoam`)** occupy the broad middle ground, where transient effects exist but time-averaged quantities are sufficient.
+
+In many industrial and civil engineering problems, `pimpleFoam` represents the safest default, as it preserves transient capability while allowing controlled relaxation toward steady behaviour.
+
+---
+
+## 5.4.3 Free-Surface and Multiphase Flows
+
+When phase interfaces are present, solver choice is no longer optional. Free-surface dynamics introduce wave propagation, interface deformation, and strong nonlinear coupling between momentum and volume fraction transport.
+
+Solvers such as `interFoam` and `interIsoFoam` explicitly resolve these mechanisms. As a consequence:
+
+* The governing equations are **inherently transient**
+* Time-step size is constrained by both Courant and interface compression criteria
+* Attempting steady-state formulations is physically invalid
+
+From an engineering perspective, any attempt to force convergence of a free-surface problem using steady-state logic represents a modelling error, not a numerical one.
+
+---
+
+## 5.4.4 Compressible and Buoyancy-Driven Flows
+
+Compressible solvers extend the incompressible framework by allowing density to vary with pressure, temperature, or composition. These solvers should be selected only when such variations materially influence the engineering question.
+
+Examples include:
+
+* High-speed gas flows
+* Strongly buoyant or thermally driven systems
+* Problems where acoustic or pressure-wave propagation is relevant
+
+Using compressible solvers without physical justification increases computational cost and often degrades robustness without improving solution fidelity.
+
+---
+
+## 5.4.5 Common Engineering Misuse Patterns
+
+Several solver-selection errors recur frequently in practice:
+
+* Applying steady-state solvers to flows with intrinsic unsteadiness
+* Using incompressible solvers for interface-dominated problems
+* Treating solver choice as a numerical convenience rather than a modelling decision
+* Attempting to suppress physical oscillations through under-relaxation
+
+These errors are particularly dangerous because they rarely cause solver failure; instead, they produce *plausible but incorrect* results.
+
+---
+
+## 5.4.6 Position Within the CFD Workflow
+
+Solver selection forms the conceptual bridge between:
+
+* **Problem definition** (Chapter 02)
+* **Mesh strategy and resolution** (Chapter 04)
+* **Numerical stability and convergence control** (Chapter 08)
+
+A well-chosen solver simplifies all downstream decisions. A poorly chosen solver complicates every stage of the analysis and undermines validation efforts.
+
+---
+
+This completes the solver-selection framework. The next chapter addresses **turbulence modelling**, where additional layers of physical approximation are introduced and must be aligned with the solver assumptions established here.
