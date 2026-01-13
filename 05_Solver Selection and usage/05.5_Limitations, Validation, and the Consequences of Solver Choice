@@ -1,0 +1,81 @@
+## 05.5 Limitations, Validation, and the Consequences of Solver Choice
+
+Solver selection does not only influence numerical stability and runtime; it fundamentally constrains **what can be validated and how confidently results can be interpreted**. Every solver embeds modelling assumptions that limit the range of physical behaviours it can represent. Understanding these limitations is essential for credible engineering use of CFD.
+
+---
+
+### 5.5.1 Solver Choice as a Source of Model Uncertainty
+
+In the hierarchy of CFD uncertainty sources—geometry, boundary conditions, turbulence modelling, numerics—solver choice is often overlooked because it is assumed to be a purely technical decision. In reality, solver selection introduces **structural model uncertainty**.
+
+For example:
+
+* A steady-state solver removes all temporal dynamics by construction
+* An incompressible solver excludes pressure-wave propagation
+* A VOF solver smears interfaces at the grid scale
+
+These limitations are not errors; they are **known exclusions of physics**. Problems arise when excluded physics are nonetheless relevant to the engineering outcome.
+
+---
+
+### 5.5.2 Implications for Verification and Validation
+
+Verification answers the question: *is the model solved correctly?* Validation asks: *is the correct model being solved?* Solver choice directly affects the latter.
+
+A simulation may be fully converged, grid-independent, and numerically stable, yet fail validation because the solver cannot represent the dominant physical mechanism observed in experiments or field data.
+
+Examples include:
+
+* Matching mean pressure drop with `simpleFoam` while missing unsteady load fluctuations
+* Predicting average water level in a free-surface flow while suppressing wave dynamics
+* Capturing mean temperature fields while ignoring buoyancy-driven instabilities
+
+In such cases, disagreement with measurements is often incorrectly attributed to turbulence modelling or mesh resolution, when the root cause is an inappropriate solver framework.
+
+---
+
+### 5.5.3 False Confidence from Residual Convergence
+
+Residual reduction is a necessary but insufficient condition for solution validity. Certain solver choices can artificially suppress residuals while simultaneously suppressing physical variability.
+
+Steady-state solvers, in particular, may converge rapidly by damping transient modes that are physically real. This creates a dangerous form of false confidence: the simulation appears clean, stable, and repeatable, yet fails to represent reality.
+
+Engineers should therefore interpret residuals as **numerical diagnostics**, not indicators of physical correctness. Physical sanity checks—force histories, spectra, conservation balances—are indispensable.
+
+---
+
+### 5.5.4 When Solver Limitations Are Acceptable
+
+Not all excluded physics are equally important. Solver limitations are acceptable when:
+
+* The excluded phenomena occur at scales irrelevant to the quantity of interest
+* The engineering decision depends on long-term averages only
+* Conservative bias is introduced intentionally and acknowledged
+
+For example, using a steady solver to estimate mean head loss in a mildly separated internal flow may be defensible, provided unsteady loads are not of interest and appropriate safety factors are applied.
+
+The key requirement is **explicit justification**, not implicit assumption.
+
+---
+
+### 5.5.5 Positioning Solver Choice in Engineering Documentation
+
+From a professional standpoint, solver choice should be documented alongside geometry, boundary conditions, and turbulence models. A clear statement of solver assumptions allows reviewers and stakeholders to understand:
+
+* Which physical mechanisms are resolved
+* Which are averaged or excluded
+* How these choices affect confidence in the results
+
+This practice is particularly important in regulatory, safety-critical, or design-optimisation contexts.
+
+---
+
+### 5.5.6 Transition to Turbulence Modelling
+
+Solver choice defines the temporal and physical framework within which turbulence models operate. A turbulence model cannot recover physics that the solver itself suppresses.
+
+For this reason, turbulence modelling is treated next, building directly on the solver-selection principles established in this chapter.
+
+---
+
+This concludes **Chapter 05 — Solver Selection and Usage**.
