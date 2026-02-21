@@ -1,0 +1,65 @@
+Purpose
+
+Mesh topology and cell quality directly influence solution accuracy, numerical stability, and solver robustness. Poor topology can lead to non-physical results even if mesh statistics (e.g. cell count) appear acceptable. This subsection provides practical diagnostics and quality targets tailored for engineering simulations.
+
+4.3.1 Mesh Topology Fundamentals
+
+Topology refers to how cells are connected in the mesh. Key aspects include:
+
+Cell shape distribution: Ideally predominantly hexahedral shapes for structured regions; tetrahedral or polyhedral cells where complexity demands.
+
+Edge and face alignment: Cells should align with predominant flow directions where possible (e.g., boundary layers) to reduce numerical diffusion.
+
+Neighbour connectivity: A well-connected mesh (regular neighbour counts per cell) reduces abrupt gradients in interpolation stencils.
+
+In OpenFOAM, mesh topology is stored in polyMesh (points, faces, owner/neighbour) and is used by all solvers internally.
+
+4.3.2 Cell Quality Metrics
+
+Evaluate quality metrics using utilities like checkMesh before any simulation:
+
+Non-orthogonality (max non-orthogonality): Target < 70°. Values above ~80° indicate dangerous regions that can degrade matrix conditioning.
+
+Skewness: Lower skewness values (< 4) are generally acceptable. Severe skew impacts gradient accuracy.
+
+Aspect ratio: For boundary layer regions, high aspect ratios may be physically necessary (thin layers), but in bulk flow aim for < 10:1 where possible.
+
+Face area ratio / cell volume ratio: Large variations can destabilise solvers, especially in RANS/LES contexts.
+
+Example in checkMesh output:
+
+Max non-orthogonality: 82.5°
+Max skewness: 6.7
+Max aspect ratio: 29
+
+Action: revisit mesh refinement, smoothing, or refine region control to improve metrics.
+
+4.3.3 Practical Tips
+
+Boundary layers: Prefer expanding prisms or hexa layers with growth ratio < 1.2–1.25 to avoid excessive numerical diffusion.
+
+Transition regions: Introduce gradual refinement; avoid sudden cell size jumps which induce interpolation errors.
+
+Mesh perturbations: For curved geometries, use mesh smoothing or surface refinement rather than high skewness.
+
+4.3.4 Diagnostics Workflow
+
+Run blockMesh / snappyHexMesh to build base mesh.
+
+Run checkMesh and parse warnings (>70° non-orthogonality, large skew).
+
+Visualise problematic regions in ParaView — colour by quality criteria.
+
+Apply corrective interpolations or local refinements; rerun diagnostics.
+
+Tip: Combining quality outputs with physics intuition (e.g., pressure gradients, expected vortical regions) improves mesh design quality for high-fidelity engineering results.
+
+4.3.5 Case Example — Mesh Correction
+
+For a complex bluff body:
+
+Initial mesh shows peaks of non-orthogonality near sharp leading edges.
+
+Solution: insert targeted surface refinement and use featureEdgeMesh to preserve geometric fidelity.
+
+Result: non-orthogonality reduced below 65°, solver converges faster with reduced residual noise.
