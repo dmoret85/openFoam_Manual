@@ -84,6 +84,25 @@ In practice, this manual is intended to be used alongside the official documenta
 
 ---
 
+### Chapter 02 — Case Setup & CFD Workflow in OpenFOAM
+
+- [02.1 OpenFOAM Case Directory Structure]
+- [02.2 Input File Syntax & Dictionaries]
+- [02.3 Typical CFD Workflow Steps]
+- [02.4 Running OpenFOAM Cases]
+- [02.5 Case Management Best Practices]
+
+---
+### Chapter 03 — Case Setup & CFD Workflow in OpenFOAM
+
+- [03.1 Governing Equations in Integral Form]
+- [03.2 Finite Volume Discretisation]
+- [03.3 Numerical Schemes (fvSchemes)]
+- [03.4 Linear Solvers & Convergence (fvSolution)]
+- [03.5 Stability & Accuracy]
+- 
+---
+
 ### Chapter 04 — Mesh Strategy and Quality
 - [04.1 Mesh Strategy](04_Mesh%20Strategy%20and%20Quality/04.1_Mesh_strategy.md)
 - [04.2 Mesh Quality Metrics](04_Mesh%20Strategy%20and%20Quality/04.2_Mesh_quality_metrics.md)
